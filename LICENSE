@@ -1,0 +1,7 @@
+The Volta HDL `voltahdl` package is under the LGPL license.
+- You can make money using your Volta HDL description and the generated netlists, and other output files
+- You don't have to share your Volta HDL descriptions or generated files
+- There are no fees or royalties
+- If you make improvements to the Volta HDL core, please share them with everybody
+
+The Volta HDL library `voltalib` is under the MIT license.
