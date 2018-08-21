@@ -6,10 +6,8 @@ import io
 
 import numpy as np
 
-from . import scope
 from . import nets
 from . import units
-from . import sim
 
 
 class NgspiceContext(object):
@@ -27,15 +25,14 @@ class NgspiceContext(object):
         return self.indices[des]
 
     def net(self, node):
-        net = nets.net_for_node(node)
-        if net is None:
+        if node.net is None:
             raise RuntimeError(
                 'Nodes must have assigned nets for Ngspice simulation')
-        if net not in self.net_mapping:
-            self.net_mapping[net] = self.net_counter
+        if node.net not in self.net_mapping:
+            self.net_mapping[node.net] = self.net_counter
             self.net_counter += 1
-        net_num = self.net_mapping[net]
-        self.reverse_mapping[net_num] = net
+        net_num = self.net_mapping[node.net]
+        self.reverse_mapping[net_num] = node.net
         return net_num
 
     def format_units(self, value):
@@ -54,7 +51,11 @@ class NgspiceContext(object):
             raise RuntimeError('This unit is not implemented for Ngspice yet')
 
 
-def transient(gnd, tstep, tstop, tstart=0, tmax=None):
+class NgspiceResult(object):
+    pass
+
+
+def transient(circuit, tstep, tstop, tstart=0, tmax=None):
     tstep = units.check(tstep, units.seconds)
     tstop = units.check(tstop, units.seconds)
     tstart = units.check(tstart, units.seconds)
@@ -63,15 +64,20 @@ def transient(gnd, tstep, tstop, tstart=0, tmax=None):
 
     context = NgspiceContext()
     # Ngspice wants gnd as net 0
-    if isinstance(gnd, nets.Node):
-        context.net_mapping[gnd.net()] = 0
-    elif isinstance(gnd, nets.Net):
-        context.net_mapping[gnd] = 0
+    if getattr(circuit, 'gnd', None) is None:
+        raise RuntimeError(
+            'Circuit must have a gnd attribute set to a net or'
+            ' node for simulation.')
+    if isinstance(circuit.gnd, nets.Node):
+        context.net_mapping[circuit.gnd.net] = 0
+    elif isinstance(circuit.gnd, nets.Net):
+        context.net_mapping[circuit.gnd] = 0
     else:
-        raise RuntimeError('gnd must be a net or node')
+        raise RuntimeError(
+            'Circuit gnd attribute must be a net or node for simulation')
 
     spice = 'Volta Transient\n\n'
-    components = scope.current().components
+    components = circuit.components.values()
     spice += generate_includes(components)
     spice += generate_components(context, components)
     spice += '.tran {} {} {} {}\n\n'.format(
@@ -83,7 +89,8 @@ def transient(gnd, tstep, tstop, tstart=0, tmax=None):
     spice += generate_control(context)
     spice += '.end'
     raw_output = run(spice)
-    sim.SIMULATION_RESULT = parse_ngspice_binary(context, raw_output)
+    parsed = parse_ngspice_binary(context, raw_output)
+    return generate_result(circuit, context, parsed)
 
 
 def generate_includes(components):
@@ -117,13 +124,17 @@ def generate_control(context):
 
 def run(spice):
     input_handle, input_path = tempfile.mkstemp()
-    print(input_path)
     os.write(input_handle, spice.encode('utf-8'))
     os.close(input_handle)
     output_handle, output_path = tempfile.mkstemp()
     os.close(output_handle)
-    print(output_path)
-    subprocess.check_call(['ngspice', '-r', output_path, '-b', input_path])
+    try:
+        subprocess.check_call(['ngspice', '-r', output_path, '-b', input_path])
+    except subprocess.CalledProcessError as e:
+        print('\n---- DEBUG ----')
+        print('Ngspice netlist path: ' + input_path)
+        print('---------------\n')
+        raise e
     with open(output_path, 'rb') as fp:
         raw_output = fp.read()
     try:
@@ -247,3 +258,18 @@ def parse_ngspice_binary(context, raw):
     # it for completedness in the result API
     data['v'][context.reverse_mapping[0]] = np.zeros(num_points)
     return data
+
+
+def generate_result(circuit, context, parsed):
+    result = NgspiceResult()
+    result.time = parsed['time']
+    for component in circuit.components.values():
+        component_result = NgspiceResult()
+        component_result.pins = NgspiceResult()
+        for pin in component.pins.get():
+            pin_result = NgspiceResult()
+            pin_result.v = parsed['v'][pin.net]
+            pin_result.voltage = pin_result.v
+            setattr(component_result.pins, pin.name, pin_result)
+        setattr(result, component.name, component_result)
+    return result

@@ -1,20 +1,25 @@
-from . import scope
 from .nets import Node, Net
 
 
 class Pin(Node):
     def __init__(self):
         super().__init__()
+        self.name = None
 
 
 class Pins(object):
     def __init__(self, component):
+        self.pins = {}
         self.component = component
+
+    def get(self):
+        return self.pins.values()
 
     def __setattr__(self, name, value):
         if isinstance(value, Pin):
             value.name = name
             value.component = self.component
+            self.pins[name] = value
         super().__setattr__(name, value)
 
 
@@ -23,8 +28,8 @@ class Component(object):
     spice_models = {}
 
     def __init__(self):
+        self.name = None
         self.pins = Pins(self)
-        scope.add_component(self)
 
 
 class TwoPinComponent(Component):
