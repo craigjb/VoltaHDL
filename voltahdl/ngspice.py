@@ -272,4 +272,10 @@ def generate_result(circuit, context, parsed):
             pin_result.voltage = pin_result.v
             setattr(component_result.pins, pin.name, pin_result)
         setattr(result, component.name, component_result)
+    result.ports = NgspiceResult()
+    for port in circuit.ports.get():
+        port_result = NgspiceResult()
+        port_result.v = parsed['v'][port.net]
+        port_result.voltage = port_result.v
+        setattr(result.ports, port.name, port_result)
     return result

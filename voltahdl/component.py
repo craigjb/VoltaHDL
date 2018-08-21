@@ -1,10 +1,16 @@
 from .nets import Node, Net
+from . import circuit
 
 
 class Pin(Node):
     def __init__(self):
         super().__init__()
         self.name = None
+
+    def to_port(self):
+        port = circuit.Port()
+        self + port
+        return port
 
 
 class Pins(object):

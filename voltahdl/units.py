@@ -13,6 +13,12 @@ def check(value, unit):
             return v
         except pint.errors.DimensionalityError as e:
             raise e
+    elif isinstance(value, Quantity):
+        try:
+            value.to(unit)
+            return value
+        except pint.errors.DimensionalityError as e:
+            raise e
     else:
         v = Quantity(value, unit)
         try:
@@ -29,6 +35,12 @@ ns = ureg('nanosecond')
 us = ureg('microsecond')
 ms = ureg('millisecond')
 
+hertz = Hz = ureg('hertz')
+kilohertz = KHz = ureg('kilohertz')
+megahertz = MHz = ureg('megahertz')
+gigahertz = GHz = ureg('gigahertz')
+terahertz = THz = ureg('terahertz')
+
 V = volts = volt = ureg('volt')
 mV = ureg('mV')
 uV = ureg('uV')
@@ -37,7 +49,7 @@ pV = ureg('pV')
 fV = ureg('fV')
 
 mohm = ureg('mohm')
-ohm = ureg('ohm')
+ohm = ohms = ureg('ohm')
 kohm = ureg('kohm')
 ureg.define('k = 1000 * ohm')
 Mohm = ureg('Mohm')
