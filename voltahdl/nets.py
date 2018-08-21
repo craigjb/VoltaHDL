@@ -1,7 +1,6 @@
-from functools import reduce
-
 from . import scope
 from . import component
+from . import sim
 
 
 def net_for_node(node):
@@ -62,6 +61,11 @@ class Node(object):
     def net(self):
         return net_for_node(self)
 
+    def v(self):
+        return sim.SIMULATION_RESULT['v'][net_for_node(self)]
+
+    voltage = v
+
 
 class Net(object):
     def __add__(self, other):
@@ -79,3 +83,9 @@ class Net(object):
 
     def nodes(self):
         return nodes_for_net(self)
+
+    def v(self):
+        return sim.SIMULATION_RESULT['v'][self]
+
+    voltage = v
+

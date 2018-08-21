@@ -2,6 +2,7 @@ from . import scope
 
 
 SIMULATIONS = []
+SIMULATION_RESULT = None
 
 
 def simulation(description):
@@ -15,3 +16,7 @@ def simulation(description):
 
         return wrapper
     return simulation_decorator
+
+
+def time():
+    return SIMULATION_RESULT['time']

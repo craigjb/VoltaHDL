@@ -3,6 +3,7 @@ from .component import Component, Pin
 from .circuit import Circuit, Port
 from .rlc import Resistor, Capacitor, Inductor
 from .vsource import VPulse
+from . import sim
 from .sim import simulation
 from . import ngspice
 

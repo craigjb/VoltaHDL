@@ -9,12 +9,14 @@ import numpy as np
 from . import scope
 from . import nets
 from . import units
+from . import sim
 
 
 class NgspiceContext(object):
     def __init__(self):
         self.net_counter = 1
         self.net_mapping = {}
+        self.reverse_mapping = {}
         self.indices = {}
 
     def index(self, des):
@@ -32,7 +34,9 @@ class NgspiceContext(object):
         if net not in self.net_mapping:
             self.net_mapping[net] = self.net_counter
             self.net_counter += 1
-        return self.net_mapping[net]
+        net_num = self.net_mapping[net]
+        self.reverse_mapping[net_num] = net
+        return net_num
 
     def format_units(self, value):
         compatible = value.compatible_units()
@@ -79,8 +83,7 @@ def transient(gnd, tstep, tstop, tstart=0, tmax=None):
     spice += generate_control(context)
     spice += '.end'
     raw_output = run(spice)
-    parsed = parse_ngspice_binary(raw_output)
-    return parsed
+    sim.SIMULATION_RESULT = parse_ngspice_binary(context, raw_output)
 
 
 def generate_includes(components):
@@ -205,7 +208,7 @@ def spice_format_henries(v):
         return str(v.to(units.henries).magnitude)
 
 
-def parse_ngspice_binary(raw):
+def parse_ngspice_binary(context, raw):
     fp = io.BytesIO(raw)
     flags = []
     var_names = []
@@ -229,5 +232,18 @@ def parse_ngspice_binary(raw):
         'names': var_names,
         'formats': [num_format] * num_vars
     })
-    data = np.fromstring(fp.read(), dtype=np_dtype, count=num_points)
+    points = np.fromstring(fp.read(), dtype=np_dtype, count=num_points)
+    data = {
+        'v': {}
+    }
+    for var in var_names:
+        if var.startswith('v'):
+            net_num = int(var.strip().rstrip(')').split('v(')[-1])
+            net = context.reverse_mapping[net_num]
+            data['v'][net] = points[var]
+        if var.strip() == 'time':
+            data['time'] = points[var]
+    # ngspice won't output a zero vector for the gnd net, but we will create
+    # it for completedness in the result API
+    data['v'][context.reverse_mapping[0]] = np.zeros(num_points)
     return data
