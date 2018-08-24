@@ -1,8 +1,9 @@
+import re
 import os.path
 
 import pandas
 
-from voltahdl import Circuit, Component, Pin, R, C, units
+from voltahdl import Circuit, Component, Pin, Rail, R, C, units
 
 
 def _load_variants(path):
@@ -32,7 +33,7 @@ class MIC5301(Component):
     )
 
     @classmethod
-    def has_variant(cls, package, vout):
+    def variant_for(cls, package, vout):
         if (isinstance(vout, str) and
                 (vout.lower() == 'adj' or vout.lower() == 'adj.')):
             # handle 'ADJ' or 'ADJ.' variants
@@ -43,12 +44,22 @@ class MIC5301(Component):
             vout_str = '{:.2}'.format(vout.magnitude) + 'V'
 
         # check the vout and package combination are in the variant list
-        if cls._variants[
-                (cls._variants['package'] == package) &
-                (cls._variants['output voltage'] == vout_str)].empty:
-            return False
+        variants = cls._variants[
+            (cls._variants['package'] == package) &
+            (cls._variants['output voltage'] == vout_str)
+        ]
+        if variants.empty:
+            return None
         else:
-            return True
+            v = variants['part number'].iloc[0]
+            # remove stuff in parentheses, e.g. MIC5301-2.85YML(4)
+            for remove in re.findall('\(.*\)', v):
+                v = v.replace(remove, '')
+            return v.strip()
+
+    @classmethod
+    def has_variant(cls, package, vout):
+        return cls.variant_for(package, vout) is not None
 
     def __init__(self, package, vout):
         super().__init__()
@@ -62,13 +73,15 @@ class MIC5301(Component):
             self.vout = units.check(vout, units.volts).to(units.volts)
 
         # check the vout and package combination are in the variant list
-        if not MIC5301.has_variant(package, vout):
+        self.variant = MIC5301.variant_for(package, vout)
+        if self.variant is None:
             raise ValueError(
                 'The compoent {} does not have a variant with vout = {} '
                 'and package {}'.format(
                     self.__class__.__name__, vout, package))
         self.package = package
 
+        # since there are only two packages, just create pins in code here
         if self.package == 'MLF-6':
             self.pins.EN = Pin(1)
             self.pins.GND = Pin(2)
@@ -89,9 +102,19 @@ class MIC5301(Component):
                 self.pins.BYP = Pin(4)
 
 
-def mic5301_ldo(package, vout, with_enable=False, adj_r1='10 kohm'):
-    vout = units.check(vout, units.volts).to(units.volts)
+def mic5301_ldo(package, vout, input_rail=None,
+                with_enable=False, adj_r1='10 kohm'):
+    """
+    Generates a typical application circuit for the MIC5301 LDO regulator.
 
+    An appropriate variant is selected based on 'vout'. If a fixed output
+    variant is not available, the resistor network for the adjustable variant
+    is automatically created.
+
+    The generated circuit has input and output decoupling, bypass coupling if
+    the selected package supports it, and a voltage Rail 'output_rail'.
+    """
+    vout = units.check(vout, units.volts).to(units.volts)
     c = Circuit()
 
     if MIC5301.has_variant(package, vout):
@@ -117,6 +140,7 @@ def mic5301_ldo(package, vout, with_enable=False, adj_r1='10 kohm'):
     # optional enable input or just tie to VIN for always-on
     c.ports.vin = c.mic5301.pins.VIN.to_port()
     c.ports.vout = c.mic5301.pins.OUT.to_port()
+    c.ports.gnd = c.mic5301.pins.GND.to_port()
     if with_enable:
         c.ports.enable = c.mic5301.pins.EN.to_port()
     else:
@@ -132,4 +156,12 @@ def mic5301_ldo(package, vout, with_enable=False, adj_r1='10 kohm'):
     if hasattr(c.mic5301.pins, 'BYP'):
         c.cbyp = C('0.01 uF')
         c.mic5301.pins.BYP > c.cbyp < c.mic5301.pins.GND
+
+    # optionally connect input rail
+    if input_rail is not None:
+        c.ports.vin > input_rail < c.ports.gnd
+
+    # create output rail
+    c.output_rail = Rail(c.ports.vout, c.ports.gnd)
+
     return c
