@@ -67,8 +67,8 @@ class Component(object):
 class TwoPinComponent(Component):
     def __init__(self):
         super().__init__()
-        self.pins.a = Pin()
-        self.pins.b = Pin()
+        self.pins.a = Pin(1)
+        self.pins.b = Pin(2)
 
     def __lt__(self, other):
         if isinstance(other, Node):

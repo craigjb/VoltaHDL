@@ -266,7 +266,7 @@ def generate_result(circuit, context, parsed):
     for component in circuit.components.values():
         component_result = NgspiceResult()
         component_result.pins = NgspiceResult()
-        for pin in component.pins.get():
+        for pin in component.pins._get():
             pin_result = NgspiceResult()
             pin_result.v = parsed['v'][pin.net]
             pin_result.voltage = pin_result.v
