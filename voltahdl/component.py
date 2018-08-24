@@ -11,8 +11,10 @@ class Pin(Node):
     def add_number(self, num):
         if isinstance(self.number, list):
             self.number.append(num)
+            self.component.pins._add_pin_number(num, self)
         else:
             self.number = [self.number, num]
+            self.component.pins._add_pin_number(num, self)
 
     def to_port(self):
         port = circuit.Port()
@@ -22,18 +24,35 @@ class Pin(Node):
 
 class Pins(object):
     def __init__(self, component):
-        self.pins = {}
-        self.component = component
+        self._pins = {}
+        self._pins_by_number = {}
+        self._component = component
 
-    def get(self):
-        return self.pins.values()
+    def _get(self):
+        return self._pins.values()
+
+    def _number(self, num):
+        return self._pins_by_number.get(num, None)
 
     def __setattr__(self, name, value):
         if isinstance(value, Pin):
             value.name = name
-            value.component = self.component
-            self.pins[name] = value
+            value.component = self._component
+            self._pins[name] = value
+            if value.number in self._pins_by_number:
+                raise ValueError(
+                    'Pin number {} cannot be assigned to multiple pins on '
+                    'component {}: {} and {}'.format(
+                        value.number, self._component.__class__.__name__,
+                        self._pins_by_number[value.number].name, name))
+            self._pins_by_number[value.number] = value
         super().__setattr__(name, value)
+
+    def _add_pin_alias(self, name, pin):
+        super().__setattr__(name, pin)
+
+    def _add_pin_number(self, pin, num):
+        self._pins_by_number[num] = pin
 
 
 class Component(object):

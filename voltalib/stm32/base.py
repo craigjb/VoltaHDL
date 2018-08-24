@@ -17,10 +17,9 @@ class STM32Component(Component):
         pinout.pinout_to_pins(self, self._pinout, package)
 
 
-def generate_stm32_component(name, pinout_path):
+def generate_stm32_component(name, base, pinout_path):
     def __init__(self, package):
-        STM32Component.__init__(self)
-
+        base.__init__(self)
         self._init_pinout(pinout_path, package)
 
-    return type(name, (STM32Component,), {'__init__': __init__})
+    return type(name, (base,), {'__init__': __init__})

@@ -1,3 +1,4 @@
+import re
 import numpy as np
 import pandas
 
@@ -92,8 +93,34 @@ def pinout_to_pins(component, pinout, package):
     """
     pinout = pinout[pinout[package] != '-']
     for idx, row in pinout.iterrows():
-        name = row['pin name']
-        if hasattr(component.pins, name):
-            getattr(component.pins, name).add_number(row[package])
-        else:
-            setattr(component.pins, name, Pin(row[package]))
+        # pins can have multiple primary names; see below
+        names = row['pin name']
+
+        # some of the pins have a '-' or '+' at the end
+        # let's convert those to '_M' and '_P'
+        if names.endswith('-'):
+            names = names[0:-1] + '_M'
+        elif names.endswith('+'):
+            names = names[0:-1] + '_P'
+
+        # remove repeated stuff in parentheses, e.g. PC14-OSC32_IN (PC14)
+        for remove in re.findall('\(.*\)', names):
+            names = names.replace(remove, '')
+
+        # some of the STM32 pins have multiple primary names
+        # (e.g. PC15-OSC32_OUT), separated by a '-'
+        names = [s.strip() for s in names.split('-')]
+        for name in names:
+            number = row[package]
+            if hasattr(component.pins, name):
+                # handles the case where the component already has this pin
+                # name, but we need to add another pin number (e.g. multiple
+                # VDD pins)
+                getattr(component.pins, name).add_number(number)
+            elif component.pins._number(number) is not None:
+                # handles the case where the component has multiple pin names
+                # at a single pin number (e.g. VDD and VDDA shorted internally)
+                component.pins._add_pin_alias(
+                    name, component.pins._number(number))
+            else:
+                setattr(component.pins, name, Pin(number))
