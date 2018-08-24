@@ -11,14 +11,14 @@ class TLC555(Component):
     def __init__(self):
         super().__init__()
 
-        self.pins.vcc = Pin()
-        self.pins.gnd = Pin()
-        self.pins.trigger = Pin()
-        self.pins.output = Pin()
-        self.pins.reset = Pin()
-        self.pins.control = Pin()
-        self.pins.threshold = Pin()
-        self.pins.discharge = Pin()
+        self.pins.vcc = Pin(8)
+        self.pins.gnd = Pin(1)
+        self.pins.trigger = Pin(2)
+        self.pins.output = Pin(3)
+        self.pins.reset = Pin(4)
+        self.pins.control = Pin(5)
+        self.pins.threshold = Pin(6)
+        self.pins.discharge = Pin(7)
 
     def spice(self, context):
         return "X{} {} {} {} {} {} {} {} {} TLC555".format(

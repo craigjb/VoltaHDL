@@ -3,9 +3,16 @@ from . import circuit
 
 
 class Pin(Node):
-    def __init__(self):
+    def __init__(self, number):
         super().__init__()
         self.name = None
+        self.number = number
+
+    def add_number(self, num):
+        if isinstance(self.number, list):
+            self.number.append(num)
+        else:
+            self.number = [self.number, num]
 
     def to_port(self):
         port = circuit.Port()

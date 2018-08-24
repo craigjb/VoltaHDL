@@ -1,0 +1,203 @@
+﻿LQFP48,LQFP64 ,TFBGA64 ,LQFP100 ,UFBGA100 ,Pin name ,Pin type ,I/O Structure,Note,Alternate functions ,Additional functions 
+- ,- ,- ,1,B2 ,PE2 ,I/O ,FT ,- ,"LCD_SEG38, TIM3_ETR ",- 
+,,,,,,,,,,
+- ,- ,- ,2,A1 ,PE3 ,I/O ,FT ,- ,"TIM22_CH1, LCD_SEG39, TIM3_CH1 ",- 
+,,,,,,,,,,
+- ,- ,- ,3,B1 ,PE4 ,I/O ,FT ,- ,"TIM22_CH2, TIM3_CH2 ",- 
+,,,,,,,,,,
+- ,- ,- ,4,C2 ,PE5 ,I/O ,FT ,- ,"TIM21_CH1, TIM3_CH3 ",- 
+,,,,,,,,,,
+- ,- ,- ,5,D2 ,PE6 ,I/O ,FT ,- ,"TIM21_CH2, TIM3_CH4 ",RTC_TAMP3/WKUP3 
+,,,,,,,,,,
+1,1,B2 ,6,E2 ,VLCD ,S ,,- ,- ,
+,,,,,,,,,,
+2,2,A2 ,7,C1 ,PC13 ,I/O ,FT ,- ,- ,RTC_TAMP1/RTC_TS/ RTC_OUT/WKUP2 
+,,,,,,,,,,
+3,3,A1 ,8,D1 ,PC14- OSC32_IN (PC14) ,I/O ,FT ,- ,- ,OSC32_IN 
+,,,,,,,,,,
+4,4,B1 ,9,E1 ,PC15- OSC32_OUT (PC15) ,I/O ,TC ,- ,- ,OSC32_OUT 
+,,,,,,,,,,
+- ,- ,- ,10,F2 ,PH9 ,I/O ,FT ,- ,- ,- 
+,,,,,,,,,,
+- ,- ,- ,11,G2 ,PH10 ,I/O ,FT ,- ,- ,- 
+,,,,,,,,,,
+5,5,C1 ,12,F1 ,PH0-OSC_IN (PH0) ,I/O ,TC ,- ,USB_CRS_SYNC ,OSC_IN 
+,,,,,,,,,,
+6,6,D1 ,13,G1 ,PH1- OSC_OUT (PH1) ,I/O ,TC ,- ,- ,OSC_OUT 
+,,,,,,,,,,
+7,7,E1 ,14,H2 ,NRST ,I/O ,- ,- ,- ,- 
+,,,,,,,,,,
+- ,8,E3 ,15,H1 ,PC0 ,I/O ,FTf ,- ,"LPTIM1_IN1, LCD_SEG18, EVENTOUT, TSC_G7_IO1, LPUART1_RX, I2C3_SCL ",ADC_IN10 
+,,,,,,,,,,
+- ,9,E2 ,16,J2 ,PC1 ,I/O ,FTf ,- ,"LPTIM1_OUT, LCD_SEG19, EVENTOUT, TSC_G7_IO2, LPUART1_TX, I2C3_SDA ",ADC_IN11 
+,,,,,,,,,,
+- ,10,F2 ,17,J3 ,PC2 ,I/O ,FTf ,- ,"LPTIM1_IN2, ",ADC_IN12 
+,,,,,,,,,,
+,,,,,,,,,"LCD_SEG20, SPI2_MISO/I2S2_MCK, TSC_G7_IO3 ",
+,,,,,,,,,,
+- ,11,- ,18,K2 ,PC3 ,I/O ,FT ,- ,"LPTIM1_ETR, LCD_SEG21, SPI2_MOSI/I2S2_SD, TSC_G7_IO4 ",ADC_IN13 
+,,,,,,,,,,
+8,12,F1 ,19,J1 ,VSSA ,S ,- ,- ,- ,- 
+,,,,,,,,,,
+- ,- ,- ,20,K1 ,VREF- ,S ,- ,- ,- ,- 
+,,,,,,,,,,
+- ,- ,G1 ,21,L1 ,VREF+ ,S ,- ,- ,- ,- 
+,,,,,,,,,,
+9,13,H1 ,22,M1 ,VDDA ,S ,- ,- ,- ,- 
+,,,,,,,,,,
+10,14,G2 ,23,L2 ,PA0 ,I/O ,TC ,- ,"TIM2_CH1, TSC_G1_IO1, USART2_CTS, TIM2_ETR, USART4_TX, COMP1_OUT ","COMP1_INM, ADC_IN0, RTC_TAMP2/WKUP1 "
+,,,,,,,,,,
+11,15,H2 ,24,M2 ,PA1 ,I/O ,FT ,- ,"EVENTOUT, LCD_SEG0, TIM2_CH2, TSC_G1_IO2, USART2_RTS_DE, TIM21_ETR, USART4_RX ","COMP1_INP, ADC_IN1 "
+,,,,,,,,,,
+12,16,F3 ,25,K3 ,PA2 ,I/O ,FT ,- ,"TIM21_CH1, LCD_SEG1, TIM2_CH3, TSC_G1_IO3, USART2_TX, LPUART1_TX, COMP2_OUT ","COMP2_INM, ADC_IN2 "
+,,,,,,,,,,
+13,17,G3 ,26,L3 ,PA3 ,I/O ,FT ,- ,"TIM21_CH2, LCD_SEG2, TIM2_CH4, TSC_G1_IO4, USART2_RX, LPUART1_RX ","COMP2_INP, ADC_IN3 "
+,,,,,,,,,,
+- ,18,C2 ,27,E3 ,VSS ,S ,- ,- ,- ,- 
+,,,,,,,,,,
+- ,19,D2 ,28,H3 ,VDD ,S ,- ,- ,- ,- 
+,,,,,,,,,,
+14,20,H3 ,29,M3 ,PA4 ,I/O ,TC ,-1,"SPI1_NSS, TSC_G2_IO1, USART2_CK, TIM22_ETR ","COMP1_INM, COMP2_INM, ADC_IN4, DAC_OUT1 "
+,,,,,,,,,,
+15,21,F4 ,30,K4 ,PA5 ,I/O ,TC ,- ,"SPI1_SCK, TIM2_ETR, TSC_G2_IO2, TIM2_CH1 ","COMP1_INM, COMP2_INM, ADC_IN5, DAC_OUT2 "
+,,,,,,,,,,
+16,22,G4 ,31,L4 ,PA6 ,I/O ,FT ,- ,"SPI1_MISO, LCD_SEG3, TIM3_CH1, TSC_G2_IO3, LPUART1_CTS, TIM22_CH1, EVENTOUT, COMP1_OUT ",ADC_IN6 
+,,,,,,,,,,
+17,23,H4 ,32,M4 ,PA7 ,I/O ,FT ,- ,"SPI1_MOSI, LCD_SEG4, TIM3_CH2, TSC_G2_IO4, TIM22_CH2, EVENTOUT, COMP2_OUT ",ADC_IN7 
+,,,,,,,,,,
+- ,24,H5 ,33,K5 ,PC4 ,I/O ,FT ,- ,"EVENTOUT, LCD_SEG22, LPUART1_TX ",ADC_IN14 
+,,,,,,,,,,
+- ,25,H6 ,34,L5 ,PC5 ,I/O ,FT ,- ,"LCD_SEG23, LPUART1_RX, TSC_G3_IO1 ",ADC_IN15 
+,,,,,,,,,,
+18,26,F5 ,35,M5 ,PB0 ,I/O ,FT ,- ,"EVENTOUT, LCD_SEG5, TIM3_CH3, TSC_G3_IO2 ","LCD_VLCD3, ADC_IN8, VREF_OUT "
+,,,,,,,,,,
+19,27,G5 ,36,M6 ,PB1 ,I/O ,FT ,- ,"LCD_SEG6, TIM3_CH4, TSC_G3_IO3, LPUART1_RTS_DE ","ADC_IN9, VREF_OUT "
+,,,,,,,,,,
+20,28,G6 ,37,L6 ,PB2 ,I/O ,FT ,- ,"LPTIM1_OUT, TSC_G3_IO4, I2C3_SMBA ",LCD_VLCD1 
+,,,,,,,,,,
+- ,- ,- ,38,M7 ,PE7 ,I/O ,FT ,- ,"LCD_SEG45, USART5_CK/USART5_ RTS ",- 
+,,,,,,,,,,
+- ,- ,- ,39,L7 ,PE8 ,I/O ,FT ,- ,"LCD_SEG46, USART4_TX ",- 
+,,,,,,,,,,
+- ,- ,- ,40,M8 ,PE9 ,I/O ,FT ,- ,"TIM2_CH1, LCD_SEG47, TIM2_ETR, USART4_RX ",- 
+,,,,,,,,,,
+- ,- ,- ,41,L8 ,PE10 ,I/O ,FT ,- ,"TIM2_CH2, LCD_SEG40, USART5_TX ",- 
+,,,,,,,,,,
+- ,- ,- ,42,M9 ,PE11 ,I/O ,FT ,- ,"TIM2_CH3, USART5_RX ",LCD_VLCD2 
+,,,,,,,,,,
+- ,- ,- ,43,L9 ,PE12 ,I/O ,FT ,- ,"TIM2_CH4, SPI1_NSS ",LCD_VLCD3 
+,,,,,,,,,,
+- ,- ,- ,44,M10 ,PE13 ,I/O ,FT ,- ,"LCD_SEG41, SPI1_SCK ",- 
+,,,,,,,,,,
+- ,- ,- ,45,M11 ,PE14 ,I/O ,FT ,- ,"LCD_SEG42, SPI1_MISO ",- 
+,,,,,,,,,,
+- ,- ,- ,46,M12 ,PE15 ,I/O ,FT ,- ,"LCD_SEG43, SPI1_MOSI ",- 
+,,,,,,,,,,
+21,29,G7 ,47,L10 ,PB10 ,I/O ,FT ,- ,"LCD_SEG10, TIM2_CH3, TSC_SYNC, LPUART1_TX, SPI2_SCK, I2C2_SCL, LPUART1_RX ",- 
+,,,,,,,,,,
+22,30,H7 ,48,L11 ,PB11 ,I/O ,FT ,- ,"EVENTOUT, LCD_SEG11, TIM2_CH4, TSC_G6_IO1, LPUART1_RX, I2C2_SDA, LPUART1_TX ",- 
+,,,,,,,,,,
+23,31,D6 ,49,F12 ,VSS ,S ,,- ,- ,- 
+,,,,,,,,,,
+24,32,E5 ,50,G12 ,VDD ,S ,,- ,- ,- 
+,,,,,,,,,,
+25,33,H8 ,51,L12 ,PB12 ,I/O ,FT ,- ,"SPI2_NSS/I2S2_WS, LCD_SEG12, LPUART1_RTS_DE, TSC_G6_IO2, I2C2_SMBA, EVENTOUT ",LCD_VLCD2 
+,,,,,,,,,,
+26,34,G8 ,52,K12 ,PB13 ,I/O ,FTf ,- ,"SPI2_SCK/I2S2_CK, LCD_SEG13, MCO, TSC_G6_IO3, LPUART1_CTS, I2C2_SCL, TIM21_CH1 ",- 
+,,,,,,,,,,
+27,35,F8 ,53,K11 ,PB14 ,I/O ,FTf ,- ,"SPI2_MISO/I2S2_MCK, LCD_SEG14, RTC_OUT, TSC_G6_IO4, LPUART1_RTS_DE, I2C2_SDA, TIM21_CH2 ",- 
+,,,,,,,,,,
+28,36,F7 ,54,K10 ,PB15 ,I/O ,FT ,- ,"SPI2_MOSI/I2S2_SD, LCD_SEG15, RTC_REFIN ",- 
+,,,,,,,,,,
+- ,- ,- ,55,K9 ,PD8 ,I/O ,FT ,- ,"LPUART1_TX, LCD_SEG28 ",- 
+,,,,,,,,,,
+- ,- ,- ,56,K8 ,PD9 ,I/O ,FT ,- ,"LPUART1_RX, LCD_SEG29 ",- 
+,,,,,,,,,,
+- ,- ,- ,57,J12 ,PD10 ,I/O ,FT ,- ,LCD_SEG30 ,- 
+,,,,,,,,,,
+- ,- ,- ,58,J11 ,PD11 ,I/O ,FT ,- ,"LPUART1_CTS, LCD_SEG31 ",- 
+,,,,,,,,,,
+- ,- ,- ,59,J10 ,PD12 ,I/O ,FT ,- ,"LPUART1_RTS_DE, LCD_SEG32 ",- 
+,,,,,,,,,,
+- ,- ,- ,60,H12 ,PD13 ,I/O ,FT ,- ,LCD_SEG33 ,- 
+,,,,,,,,,,
+- ,- ,- ,61,H11 ,PD14 ,I/O ,FT ,- ,LCD_SEG34 ,- 
+,,,,,,,,,,
+- ,- ,- ,62,H10 ,PD15 ,I/O ,FT ,- ,"USB_CRS_SYNC, LCD_SEG35 ",- 
+,,,,,,,,,,
+- ,37,F6 ,63,E12 ,PC6 ,I/O ,FT ,- ,"TIM22_CH1, LCD_SEG24, TIM3_CH1, TSC_G8_IO1 ",- 
+,,,,,,,,,,
+- ,38,E7 ,64,E11 ,PC7 ,I/O ,FT ,- ,"TIM22_CH2, LCD_SEG25, TIM3_CH2, TSC_G8_IO2 ",- 
+,,,,,,,,,,
+- ,39,E8 ,65,E10 ,PC8 ,I/O ,FT ,- ,"TIM22_ETR, LCD_SEG26, TIM3_CH3, TSC_G8_IO3 ",- 
+,,,,,,,,,,
+- ,40,D8 ,66,D12 ,PC9 ,I/O ,FTf ,- ,"TIM21_ETR, LCD_SEG27, USB_NOE/TIM3_CH4, TSC_G8_IO4, I2C3_SDA ",- 
+,,,,,,,,,,
+29,41,D7 ,67,D11 ,PA8 ,I/O ,FTf ,- ,"MCO, LCD_COM0, USB_CRS_SYNC, EVENTOUT, USART1_CK, I2C3_SCL ",- 
+,,,,,,,,,,
+30,42,C7 ,68,D10 ,PA9 ,I/O ,FTf ,- ,"MCO, LCD_COM1, TSC_G4_IO1, USART1_TX, I2C1_SCL, I2C3_SMBA ",- 
+,,,,,,,,,,
+31,43,C6 ,69,C12 ,PA10 ,I/O ,FTf ,- ,"LCD_COM2, TSC_G4_IO2, USART1_RX, I2C1_SDA ",- 
+,,,,,,,,,,
+32,44,C8 ,70,B12 ,PA11 ,I/O ,FT ,-2,"SPI1_MISO, EVENTOUT, TSC_G4_IO3, USART1_CTS, COMP1_OUT ",USB_DM 
+,,,,,,,,,,
+33,45,B8 ,71,A12 ,PA12 ,I/O ,FT ,-2,"SPI1_MOSI, EVENTOUT, TSC_G4_IO4, USART1_RTS_DE, COMP2_OUT ",USB_DP 
+,,,,,,,,,,
+34,46,A8 ,72,A11 ,PA13 ,I/O ,FT ,- ,"SWDIO, USB_NOE, LPUART1_RX ",- 
+,,,,,,,,,,
+- ,- ,- ,73,C11 ,VDD ,S ,,- ,- ,- 
+,,,,,,,,,,
+35,47,D5 ,74,F11 ,VSS ,S ,,- ,- ,- 
+,,,,,,,,,,
+36,48,E6 ,75,G11 ,VDD_USB ,S ,,- ,- ,- 
+,,,,,,,,,,
+37,49,A7 ,76,A10 ,PA14 ,I/O ,FT ,- ,"SWCLK, USART2_TX, LPUART1_TX ",- 
+,,,,,,,,,,
+38,50,A6 ,77,A9 ,PA15 ,I/O ,FT ,- ,"SPI1_NSS, LCD_SEG17, TIM2_ETR, EVENTOUT, USART2_RX, TIM2_CH1, USART4_RTS_DE ",- 
+,,,,,,,,,,
+- ,51,B7 ,78,B11 ,PC10 ,I/O ,FT ,- ,"LPUART1_TX, LCD_COM4/LCD_SEG28/ LCD_SEG48, USART4_TX ",- 
+,,,,,,,,,,
+- ,52,B6 ,79,C10 ,PC11 ,I/O ,FT ,- ,"LPUART1_RX, LCD_COM5/LCD_SEG29/ LCD_SEG49, USART4_RX ",- 
+,,,,,,,,,,
+- ,53,C5 ,80,B10 ,PC12 ,I/O ,FT ,- ,"LCD_COM6/LCD_SEG30/ LCD_SEG50, USART5_TX, USART4_CK ",- 
+,,,,,,,,,,
+- ,- ,- ,81,C9 ,PD0 ,I/O ,FT ,- ,"TIM21_CH1, SPI2_NSS/I2S2_WS ",- 
+,,,,,,,,,,
+- ,- ,- ,82,B9 ,PD1 ,I/O ,FT ,- ,SPI2_SCK/I2S2_CK ,- 
+,,,,,,,,,,
+- ,54,B5 ,83,C8 ,PD2 ,I/O ,FT ,- ,"LPUART1_RTS_DE, LCD_COM7/LCD_SEG31/ LCD_SEG51, TIM3_ETR, USART5_RX ",- 
+,,,,,,,,,,
+- ,- ,- ,84,B8 ,PD3 ,I/O ,FT ,- ,"USART2_CTS, LCD_SEG44, SPI2_MISO/I2S2_MCK ",- 
+,,,,,,,,,,
+- ,- ,- ,85,B7 ,PD4 ,I/O ,FT ,- ,"USART2_RTS_DE, SPI2_MOSI/I2S2_SD ",- 
+,,,,,,,,,,
+- ,- ,- ,86,A6 ,PD5 ,I/O ,FT ,- ,USART2_TX ,- 
+,,,,,,,,,,
+- ,- ,- ,87,B6 ,PD6 ,I/O ,FT ,- ,USART2_RX ,- 
+,,,,,,,,,,
+- ,- ,- ,88,A5 ,PD7 ,I/O ,FT ,- ,"USART2_CK, TIM21_CH2 ",- 
+,,,,,,,,,,
+39,55,A5 ,89,A8 ,PB3 ,I/O ,FT ,- ,"SPI1_SCK, LCD_SEG7, TIM2_CH2, TSC_G5_IO1, EVENTOUT, USART1_RTS_DE, USART5_TX ",COMP2_INM 
+,,,,,,,,,,
+40,56,A4 ,90,A7 ,PB4 ,I/O ,FTf ,- ,"SPI1_MISO, LCD_SEG8, TIM3_CH1, TSC_G5_IO2, TIM22_CH1, USART1_CTS, USART5_RX, I2C3_SDA ",COMP2_INP 
+,,,,,,,,,,
+41,57,C4 ,91,C5 ,PB5 ,I/O ,FT ,- ,"SPI1_MOSI, LCD_SEG9, LPTIM1_IN1, I2C1_SMBA, TIM3_CH2/TIM22_CH2, USART1_CK, USART5_CK/USART5_ RTS ",COMP2_INP 
+,,,,,,,,,,
+42,58,D3 ,92,B5 ,PB6 ,I/O ,FTf ,- ,"USART1_TX, I2C1_SCL, LPTIM1_ETR, TSC_G5_IO3 ",COMP2_INP 
+,,,,,,,,,,
+43,59,C3 ,93,B4 ,PB7 ,I/O ,FTf ,- ,"USART1_RX, I2C1_SDA, LPTIM1_IN2, TSC_G5_IO4, USART4_CTS ","COMP2_INP, PVD_IN "
+,,,,,,,,,,
+44,60,B4 ,94,A4 ,BOOT0 ,I ,,- ,- ,- 
+,,,,,,,,,,
+45,61,B3 ,95,A3 ,PB8 ,I/O ,FTf ,- ,"LCD_SEG16, TSC_SYNC, I2C1_SCL ",- 
+,,,,,,,,,,
+46,62,A3 ,96,B3 ,PB9 ,I/O ,FTf ,- ,"LCD_COM3, EVENTOUT, I2C1_SDA, SPI2_NSS/I2S2_WS ",- 
+,,,,,,,,,,
+- ,- ,- ,97,C3 ,PE0 ,I/O ,FT ,- ,"LCD_SEG36, EVENTOUT ",- 
+,,,,,,,,,,
+- ,- ,- ,98,A2 ,PE1 ,I/O ,FT ,- ,"LCD_SEG37, EVENTOUT ",- 
+,,,,,,,,,,
+47,63,D4 ,99,D3 ,VSS ,S ,- ,- ,- ,- 
+,,,,,,,,,,
+48,64,E4 ,100,C4 ,VDD ,S ,- ,- ,- ,- 
+,,,,,,,,,,
