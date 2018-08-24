@@ -16,6 +16,9 @@ class Resistor(TwoPinComponent):
             context.format_units(self.value)
         )
 
+    def __repr__(self):
+        return 'Resistor({})'.format(str(self.value))
+
 
 class Capacitor(TwoPinComponent):
     def __init__(self, value):
@@ -31,6 +34,9 @@ class Capacitor(TwoPinComponent):
             context.format_units(self.value)
         )
 
+    def __repr__(self):
+        return 'Capacitor({})'.format(str(self.value))
+
 
 class Inductor(TwoPinComponent):
     def __init__(self, value):
@@ -45,3 +51,6 @@ class Inductor(TwoPinComponent):
             context.net(self.pins.b),
             context.format_units(self.value)
         )
+
+    def __repr__(self):
+        return 'Inductor({})'.format(str(self.value))
