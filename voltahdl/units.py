@@ -67,3 +67,5 @@ uH = ureg('uH')
 nH = ureg('nH')
 pH = ureg('pH')
 fH = ureg('fH')
+
+bit = bits = ureg('bit')
