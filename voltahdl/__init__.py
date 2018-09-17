@@ -1,5 +1,6 @@
 from . import units
 from .component import Component, Pin
+from .nets import Net
 from .circuit import Circuit, Port
 from .rail import Rail
 from .rlc import Resistor, Capacitor, Inductor
