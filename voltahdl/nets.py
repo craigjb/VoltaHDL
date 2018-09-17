@@ -43,8 +43,8 @@ class Node(object):
 
 
 class Net(object):
-    def __init__(self, nodes=set()):
-        self.nodes = nodes
+    def __init__(self, nodes=None):
+        self.nodes = nodes or set()
 
     def __add__(self, other):
         if isinstance(other, Node):
