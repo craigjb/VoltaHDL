@@ -8,6 +8,9 @@ class Pin(Node):
         self.name = None
         self.number = number
 
+    def __repr__(self):
+        return '<Pin({0}) : {1}>'.format(self.number, self.name)
+
     def add_number(self, num):
         if isinstance(self.number, list):
             self.number.append(num)
