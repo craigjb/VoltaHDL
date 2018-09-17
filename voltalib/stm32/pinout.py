@@ -92,7 +92,7 @@ def pinout_to_pins(component, pinout, package):
         pinout.pinout_to_pins(self, pinout, 'LQFP100')
     """
     pinout = pinout[pinout[package] != '-']
-    for idx, row in pinout.iterrows():
+    for _, row in pinout.iterrows():
         # pins can have multiple primary names; see below
         names = row['pin name']
 
