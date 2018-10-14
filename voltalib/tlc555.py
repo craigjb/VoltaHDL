@@ -1,5 +1,5 @@
 import os.path
-from voltahdl import Component, Pin, Circuit, Port, units, R, C
+from voltahdl import Component, Pin, Circuit, units, R, C
 
 
 class TLC555(Component):
@@ -33,42 +33,43 @@ class TLC555(Component):
             context.net(self.pins.gnd)
         )
 
+    class SymmetricOscillator(Circuit):
+        def __init__(self, frequency, cap, vdd_decoupling='0.01 uF',
+                     resetable=False, control_decoupling=None):
+            super().__init__()
 
-def symmetric_oscillator(
-        frequency, cap, vdd_decoupling='0.01 uF', resetable=False,
-        control_decoupling=None):
-    frequency = units.check(frequency, units.hertz)
-    cap = units.check(cap, units.farads)
-    if control_decoupling is not None:
-        control_decoupling = units.check(control_decoupling, units.farads)
+            frequency = units.check(frequency, units.hertz)
+            cap = units.check(cap, units.farads)
+            if control_decoupling is not None:
+                control_decoupling = units.check(
+                    control_decoupling, units.farads)
 
-    c = Circuit()
-    c.tlc555 = TLC555()
+            self.tlc555 = TLC555()
 
-    r1_val = 1.0 / (1.443 * (cap.to(units.F).magnitude) *
-                    (frequency.to(units.Hz).magnitude))
-    c.r1 = R(r1_val * units.ohms)
-    c.c1 = C(cap)
+            r1_val = 1.0 / (1.443 * (cap.to(units.F).magnitude) *
+                            (frequency.to(units.Hz).magnitude))
+            self.r1 = R(r1_val * units.ohms)
+            self.c1 = C(cap)
 
-    c.tlc555.pins.output > c.r1 < (c.tlc555.pins.threshold +
-                                   c.tlc555.pins.trigger)
-    c.tlc555.pins.trigger > c.c1 < c.tlc555.pins.gnd
+            self.tlc555.pins.output > self.r1 < (self.tlc555.pins.threshold +
+                                                 self.tlc555.pins.trigger)
+            self.tlc555.pins.trigger > self.c1 < self.tlc555.pins.gnd
 
-    if not resetable:
-        c.tlc555.pins.reset + c.tlc555.pins.vcc
+            if not resetable:
+                self.tlc555.pins.reset + self.tlc555.pins.vcc
 
-    c.vdd_decoupling = C(vdd_decoupling)
-    c.tlc555.pins.vcc > c.vdd_decoupling < c.tlc555.pins.gnd
-    if control_decoupling is not None:
-        c.control_decoupling = C(control_decoupling)
-        c.tlc555.pins.control > c.control_decoupling < c.tlc555.pins.gnd
+            self.vdd_decoupling = C(vdd_decoupling)
+            self.tlc555.pins.vcc > self.vdd_decoupling < self.tlc555.pins.gnd
+            if control_decoupling is not None:
+                self.control_decoupling = C(control_decoupling)
+                (self.tlc555.pins.control > self.control_decoupling
+                 < self.tlc555.pins.gnd)
 
-    c.ports.vcc = c.tlc555.pins.vcc.to_port()
-    c.ports.gnd = c.tlc555.pins.gnd.to_port()
-    c.ports.output = c.tlc555.pins.output.to_port()
+            self.ports.vcc = self.tlc555.pins.vcc.to_port()
+            self.ports.gnd = self.tlc555.pins.gnd.to_port()
+            self.ports.output = self.tlc555.pins.output.to_port()
 
-    if resetable:
-        c.ports.reset = c.tlc555.pins.reset.to_port()
+            if resetable:
+                self.ports.reset = self.tlc555.pins.reset.to_port()
 
-    c.gnd = c.ports.gnd
-    return c
+            self.gnd = self.ports.gnd

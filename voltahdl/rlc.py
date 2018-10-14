@@ -1,4 +1,4 @@
-from .component import TwoPinComponent
+from .circuit import TwoPinComponent
 from . import units
 
 

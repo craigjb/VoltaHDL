@@ -6,7 +6,7 @@ import io
 
 import numpy as np
 
-from . import nets
+from .circuit import Net, Node, top_circuit, collect_components
 from . import units
 
 
@@ -55,12 +55,14 @@ class NgspiceResult(object):
     pass
 
 
-def transient(circuit, tstep, tstop, tstart=0, tmax=None):
+def transient(tstep, tstop, tstart=0, tmax=None, circuit=None):
     tstep = units.check(tstep, units.seconds)
     tstop = units.check(tstop, units.seconds)
     tstart = units.check(tstart, units.seconds)
     if tmax is not None:
         tmax = units.check(tmax, units.seconds)
+    if circuit is None:
+        circuit = top_circuit()
 
     context = NgspiceContext()
     # Ngspice wants gnd as net 0
@@ -68,16 +70,16 @@ def transient(circuit, tstep, tstop, tstart=0, tmax=None):
         raise RuntimeError(
             'Circuit must have a gnd attribute set to a net or'
             ' node for simulation.')
-    if isinstance(circuit.gnd, nets.Node):
+    if isinstance(circuit.gnd, Node):
         context.net_mapping[circuit.gnd.net] = 0
-    elif isinstance(circuit.gnd, nets.Net):
+    elif isinstance(circuit.gnd, Net):
         context.net_mapping[circuit.gnd] = 0
     else:
         raise RuntimeError(
             'Circuit gnd attribute must be a net or node for simulation')
 
     spice = 'Volta Transient\n\n'
-    components = circuit.components.values()
+    components = collect_components(circuit)
     spice += generate_includes(components)
     spice += generate_components(context, components)
     spice += '.tran {} {} {} {}\n\n'.format(
