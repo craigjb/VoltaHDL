@@ -2,7 +2,17 @@ import re
 import numpy as np
 import pandas
 
-from voltahdl import Pin
+from voltahdl import Pin, Pinout
+
+
+class STM32Pinout(Pinout):
+    def __init__(self, path):
+        packages, self.data = read_pinout(path)
+        super().__init__(packages)
+
+    def apply(self, c, package):
+        super().apply(c, package)
+        pinout_to_pins(c, self.data, package)
 
 
 REQUIRED_HEADERS = [
@@ -10,7 +20,7 @@ REQUIRED_HEADERS = [
 ]
 
 
-def load_pinout(path):
+def read_pinout(path):
     """
     Parses CSV pin-out files created by copy-and-pasting from STM32 PDF
     datasheet pin tables into Excel and then saving as CSV.
