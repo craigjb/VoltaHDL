@@ -1,27 +1,31 @@
-class Pin(object):
-    def __init__(self, number):
-        self.name = None
-        self.number = number
-
-    def __repr__(self):
-        return '<Pin({0}) : {1}>'.format(self.number, self.name)
-
-    def add_number(self, num):
-        if isinstance(self.number, list):
-            self.number.append(num)
-            self.component.pins._add_pin_number(num, self)
-        else:
-            self.number = [self.number, num]
-            self.component.pins._add_pin_number(num, self)
+from . import units
+from .connectivity import Pin
 
 
 class Pins(object):
+    """
+    Represents a Component's pins.
+
+    Each pin is an attribute on this object, and can be accessed just like
+    Python attributes.
+
+    For example: `u1.pins.gnd`
+
+    Adding pins is straightforward as well: `u1.pins.vcc = Pin(12)`
+    """
+
     def __init__(self, component):
         self._pins = {}
         self._pins_by_number = {}
         self._component = component
 
     def __setattr__(self, name, value):
+        # This overrides the Python magic method to set Pin names when they are
+        # assigned to a Pins object. This gets of rid of needless verbosity to
+        # assign names to Pins and then assign to a binding in the Pins object.
+        # i.e. instead of: `u1.pins.gnd = Pin('gnd', 12)`
+        # we can do: `u1.pins.gnd = Pin(12)`, and u1.pins.gnd.name is
+        # automatically set to 'gnd'
         if isinstance(value, Pin):
             value.name = name
             value.component = self._component
@@ -60,21 +64,53 @@ class Pinout(object):
         c.package = package
 
 
-class ComponentSeries(object):
+class ComponentBase(object):
+    _pin_func = None
+
     @classmethod
-    def def_late(cls, f):
-        def late(self):
-            self._late_funcs.append(f)
-        late.__name__ = f.__name__
-        setattr(cls, f.__name__, late)
+    def def_pins(cls, f):
+        """
+        Decorator used to specify pins for a Component if not using a Pinout.
+
+        Example:
+
+            Part123 = def_component('Part123')
+
+            @Part123.def_pins
+            def part123_pins(pins):
+                pins.vcc = Pin(1)
+                pins.gnd = Pin(2)
+                pins.output = Pin(3)
+
+        """
+        cls._pin_func = f
+        return f
+
+    @classmethod
+    def def_helper(cls, f):
+        def helper(self):
+            self._helpers.append(f)
+        helper.__name__ = f.__name__
+        setattr(cls, f.__name__, helper)
+        return f
+
+    @classmethod
+    def def_block(cls, f):
+        setattr(cls, f.__name__, f)
         return f
 
 
-class Component(object):
-    def __init__(self, package=None):
-        self.pins = Pins(self)
-        self._late_funcs = []
+class ComponentSeries(ComponentBase):
+    pass
 
+
+class Component(ComponentBase):
+    def __init__(self, *args, package=None):
+        self._helpers = []
+        self.pins = Pins(self)
+
+        if self._pin_func is not None:
+            self.__class__._pin_func(self.pins)
         if self.pinout is not None:
             if len(self.pinout.packages) > 1:
                 if package is None:
@@ -87,35 +123,67 @@ class Component(object):
             else:
                 self.pinout.apply(self, self.pinout.packages[0])
 
-    @classmethod
-    def def_late(cls, f):
-        def late(self):
-            self._late_funcs.append(f)
-        late.__name__ = f.__name__
-        setattr(cls, f.__name__, late)
-        return f
+        for i, param in enumerate(self._required_parameters):
+            if isinstance(param[1], units.Quantity):
+                setattr(self, param[0], units.check(args[i], param[1]))
+            else:
+                raise ValueError('Unknown parameter type: {}', param[1])
 
     def _late_phase(self):
-        for func in self._late_funcs:
+        for func in self._helpers:
             func(self)
 
 
-def def_component_series(name):
+class TwoPinComponent(Component):
+    def __lt__(self, other):
+        return self.pins._second + other
+
+
+def def_component_series(name, datasheet=None):
     series_class = type(name, (ComponentSeries,), {})
+    series_class.datasheet = datasheet
     return series_class
 
 
-def def_component(name, series=None, datasheet=None, pinout=None):
+def def_component(name, series=None, datasheet=None, pinout=None,
+                  required_parameters=[], base_class=None):
     if not name.isidentifier():
         raise ValueError("Component's name must be a valid Python identifier")
 
     def __init__(self, *args, **kwargs):
         Component.__init__(self, *args, **kwargs)
 
-    if series is None:
-        comp_class = type(name, (Component,), {'__init__': __init__})
+    if base_class is None:
+        base = Component
     else:
-        comp_class = type(name, (Component, series,), {'__init__': __init__})
+        base = base_class
+    if series is None:
+        comp_class = type(name, (base,), {'__init__': __init__})
+    else:
+        comp_class = type(name, (base, series,), {'__init__': __init__})
     comp_class.datasheet = datasheet
     comp_class.pinout = pinout
+    comp_class._required_parameters = required_parameters
+    return comp_class
+
+
+def def_two_pin_component(name, pin_names, *args, **kwargs):
+    if len(pin_names) != 2:
+        raise ValueError('A TwoPinComponent can only have two pin names')
+    if 'pinout' in kwargs:
+        raise ValueError('A TwoPinComponent cannot have a Pinout')
+
+    comp_class = def_component(
+        name, *args, pinout=None, base_class=TwoPinComponent, **kwargs
+    )
+
+    @comp_class.def_pins
+    def two_pins(pins):
+        first = Pin(1)
+        setattr(pins, pin_names[0], first)
+        pins._add_pin_alias('_first', first)
+        second = Pin(2)
+        setattr(pins, pin_names[1], second)
+        pins._add_pin_alias('_second', second)
+
     return comp_class

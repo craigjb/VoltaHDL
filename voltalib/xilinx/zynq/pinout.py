@@ -1,8 +1,31 @@
+import os
+import os.path
 import re
 import io
 import pandas
 
-from voltahdl import Pin
+from voltahdl import *
+
+PINOUT_DIR = os.path.dirname(__file__)
+
+
+class Zynq7000Pinout(Pinout):
+    def __init__(self, name):
+        # each package has its own file, so find all files that match the file
+        # name format to get the list of available packages.
+        self.name = name.lower()
+        pattern = self.name + '([a-z0-9]+)' + 'pkg.txt'
+        self.packages = [
+            m.group(1) for m in
+            [re.match(pattern, fn) for fn in os.listdir(PINOUT_DIR)]
+            if m is not None
+        ]
+
+    def apply(self, c, package):
+        super().apply(c, package)
+        file_name = self.name + package.lower() + 'pkg.txt'
+        data = load_pinout(os.path.join(PINOUT_DIR, file_name))
+        pinout_to_pins(c, data)
 
 
 def load_pinout(path):

@@ -8,7 +8,7 @@ PINOUT_DIR = os.path.dirname(__file__)
 STM32L0 = def_component_series('STM32L0')
 
 
-@STM32L0.def_late
+@STM32L0.def_helper
 def decouple_vdd(c):
     """
     Generates decoupling capacitors for the VDD rail per ST recommendations

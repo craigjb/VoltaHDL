@@ -6,6 +6,11 @@ Quantity = ureg.Quantity
 
 
 def check(value, unit):
+    try:
+        v = float(value)
+        return Quantity(v, unit)
+    except ValueError:
+        pass
     if isinstance(value, str):
         try:
             v = ureg(value)
