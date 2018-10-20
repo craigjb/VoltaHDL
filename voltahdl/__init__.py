@@ -8,6 +8,8 @@ from .component import (def_component, def_component_series,
 from .block import Ports, Block
 from .connectivity import Pin, Node, Net
 from .rlc import Resistor, Inductor, Capacitor
+from .scoping import block
+
 
 R = Resistor
 L = Inductor

@@ -26,4 +26,7 @@ class Ports(object):
 
 class Block(object):
     def __init__(self):
+        self.parent = None
+        self.children = set()
+        self.components = set()
         self.ports = Ports(self)

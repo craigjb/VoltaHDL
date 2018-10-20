@@ -1,5 +1,7 @@
 from . import units
 from .connectivity import Pin
+from . import block
+from . import scoping
 
 
 class Pins(object):
@@ -96,8 +98,14 @@ class ComponentBase(object):
 
     @classmethod
     def def_block(cls, f):
-        setattr(cls, f.__name__, f)
-        return f
+        def wrapper(*args, **kwargs):
+            b = block.Block()
+            scoping.push_block(b)
+            f(b, *args, **kwargs)
+            scoping.pop_block()
+            return b
+        setattr(cls, f.__name__, wrapper)
+        return wrapper
 
 
 class ComponentSeries(ComponentBase):
@@ -128,6 +136,8 @@ class Component(ComponentBase):
                 setattr(self, param[0], units.check(args[i], param[1]))
             else:
                 raise ValueError('Unknown parameter type: {}', param[1])
+
+        scoping.current_block().components.add(self)
 
     def _late_phase(self):
         for func in self._helpers:
