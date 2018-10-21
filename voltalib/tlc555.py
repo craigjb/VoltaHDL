@@ -1,7 +1,7 @@
 from voltahdl import *
 
 TLC555 = def_component(
-    'TLC555',
+    'TLC555', 'U',
     datasheet='http://www.ti.com/lit/ds/symlink/tlc555.pdf'
 )
 

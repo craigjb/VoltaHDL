@@ -113,10 +113,10 @@ class ComponentSeries(ComponentBase):
 
 
 class Component(ComponentBase):
-    def __init__(self, *args, package=None):
+    def __init__(self, *args, package=None, refdes=None):
         self._helpers = []
         self.pins = Pins(self)
-
+        self.refdes = refdes
         if self._pin_func is not None:
             self.__class__._pin_func(self.pins)
         if self.pinout is not None:
@@ -155,8 +155,8 @@ def def_component_series(name, datasheet=None):
     return series_class
 
 
-def def_component(name, series=None, datasheet=None, pinout=None,
-                  required_parameters=[], base_class=None):
+def def_component(name, refdes_prefix, series=None, datasheet=None,
+                  pinout=None, required_parameters=[], base_class=None):
     if not name.isidentifier():
         raise ValueError("Component's name must be a valid Python identifier")
 
@@ -171,20 +171,25 @@ def def_component(name, series=None, datasheet=None, pinout=None,
         comp_class = type(name, (base,), {'__init__': __init__})
     else:
         comp_class = type(name, (base, series,), {'__init__': __init__})
+    comp_class.refdes_prefix = refdes_prefix
     comp_class.datasheet = datasheet
     comp_class.pinout = pinout
     comp_class._required_parameters = required_parameters
     return comp_class
 
 
-def def_two_pin_component(name, pin_names, *args, **kwargs):
+def def_two_pin_component(name, refdes_prefix, pin_names, *args, **kwargs):
     if len(pin_names) != 2:
         raise ValueError('A TwoPinComponent can only have two pin names')
     if 'pinout' in kwargs:
         raise ValueError('A TwoPinComponent cannot have a Pinout')
 
     comp_class = def_component(
-        name, *args, pinout=None, base_class=TwoPinComponent, **kwargs
+        name, refdes_prefix,
+        *args,
+        pinout=None,
+        base_class=TwoPinComponent,
+        **kwargs
     )
 
     @comp_class.def_pins

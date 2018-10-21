@@ -24,7 +24,7 @@ def decouple_vdd(c):
 
 
 STM32L073xx = def_component(
-    'STM32L073xx',
+    'STM32L073xx', 'U',
     series=STM32L0,
     datasheet='https://www.st.com/resource/en/datasheet/stm32l073rz.pdf',
     pinout=STM32Pinout(os.path.join(PINOUT_DIR, 'STM32L073RZ.csv'))
@@ -32,14 +32,14 @@ STM32L073xx = def_component(
 
 
 STM32L011x3 = def_component(
-    'STM32L011x3',
+    'STM32L011x3', 'U',
     series=STM32L0,
     datasheet='https://www.st.com/resource/en/datasheet/stm32l011d4.pdf',
     pinout=STM32Pinout(os.path.join(PINOUT_DIR, 'STM32L011x3_4.csv'))
 )
 
 STM32L011x4 = def_component(
-    'STM32L011x4',
+    'STM32L011x4', 'U',
     series=STM32L0,
     datasheet='https://www.st.com/resource/en/datasheet/stm32l011d4.pdf',
     pinout=STM32Pinout(os.path.join(PINOUT_DIR, 'STM32L011x3_4.csv'))

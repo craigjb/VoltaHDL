@@ -12,7 +12,7 @@ ZYNQ7000 = def_component_series(
 
 def _def_zynq7000_component(name):
     return def_component(
-        name,
+        name, 'U',
         series=ZYNQ7000,
         pinout=Zynq7000Pinout(name)
     )
