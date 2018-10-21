@@ -1,3 +1,5 @@
+import copy
+
 from .connectivity import Port
 
 
@@ -30,3 +32,10 @@ class Block(object):
         self.children = set()
         self.components = set()
         self.ports = Ports(self)
+
+
+def flatten_components(b):
+    components = copy.copy(b.components)
+    for child in b.children:
+        components |= flatten_components(child)
+    return components

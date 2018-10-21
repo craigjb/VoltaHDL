@@ -1,6 +1,6 @@
 from . import units
 from .connectivity import Pin
-from . import block
+from . import blocks
 from . import scoping
 
 
@@ -99,7 +99,7 @@ class ComponentBase(object):
     @classmethod
     def def_block(cls, f):
         def wrapper(*args, **kwargs):
-            b = block.Block()
+            b = blocks.Block()
             scoping.push_block(b)
             f(b, *args, **kwargs)
             scoping.pop_block()

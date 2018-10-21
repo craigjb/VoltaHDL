@@ -1,7 +1,11 @@
-from . import block
+from . import blocks
 
 
-SCOPE_STACK = [block.Block()]
+SCOPE_STACK = [blocks.Block()]
+
+
+def top_block():
+    return SCOPE_STACK[0]
 
 
 def current_block():
@@ -9,6 +13,8 @@ def current_block():
 
 
 def pop_block():
+    if len(SCOPE_STACK) == 1:
+        raise ScopeError("Cannot pop top scope.")
     return SCOPE_STACK.pop()
 
 
